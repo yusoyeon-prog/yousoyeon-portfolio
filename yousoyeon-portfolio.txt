@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>YOUSOYEON Portfolio</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      margin-bottom: 24px;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+
+<script>
+  const url = "YOUSOYEON PORTFOLIO.pdf";
+  pdfjsLib.getDocument(url).promise.then(async pdf => {
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      document.body.appendChild(canvas);
+      await page.render({ canvasContext: context, viewport }).promise;
+    }
+  });
+</script>
+
+</body>
+</html>
