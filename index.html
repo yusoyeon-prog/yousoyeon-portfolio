@@ -1,12 +1,33 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>유소연 포트폴리오</title>
-  <meta http-equiv="refresh" content="0; url=portfolio.pdf">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio</title>
+  <style>
+    html, body { margin:0; padding:0; background:#fff; }
+    canvas { width: 100% !important; height: auto !important; display:block; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </head>
 <body>
+<script>
+  const url = "./portfolio.pdf";
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+
+  pdfjsLib.getDocument(url).promise.then(async (pdf) => {
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      document.body.appendChild(canvas);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+    }
+  });
+</script>
 </body>
 </html>
-
